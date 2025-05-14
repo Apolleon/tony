@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback, useContext } from "react";
 import { Tool } from "./types";
 import { Toolbar } from "./Toolbar";
 import { GameContext } from "../layout";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const actorChars: { [key: string]: string } = {
   "@": "player",
@@ -15,7 +15,12 @@ const actorChars: { [key: string]: string } = {
   " ": "space",
 };
 
+const validateLevel = (level: string[]) => {
+  return level.some((line) => line.includes("@"));
+};
+
 export const LeveLconstructor = () => {
+  const router = useRouter();
   const { gameLevel, setLevel, handleAddLine } = useContext(GameContext);
   const [tool, setTool] = useState<Tool>(" ");
   const [isMouseDown, setIsMouseDown] = useState(false);
@@ -93,8 +98,16 @@ export const LeveLconstructor = () => {
           </div>
         </div>
       </div>
-      <button onClick={handleAddLine}>Add line</button>
-      <Link href={"/game"}>Play</Link>
+      <button className="cursor-pointer" onClick={handleAddLine}>
+        Add line
+      </button>
+      <button
+        className={`cursor-pointer ${!validateLevel(gameLevel) ? "text-gray-500" : ""}`}
+        onClick={() => router.push("/game")}
+        disabled={!validateLevel(gameLevel)}
+      >
+        Play
+      </button>
     </section>
   );
 };
