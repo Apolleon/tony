@@ -1,9 +1,9 @@
 "use client";
-import { useState, useEffect, useCallback, useContext } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Tool } from "./types";
 import { Toolbar } from "./Toolbar";
-import { GameContext } from "../layout";
 import { useRouter } from "next/navigation";
+import { useMyContext } from "./useGameContext";
 
 const actorChars: { [key: string]: string } = {
   "@": "player",
@@ -21,7 +21,7 @@ const validateLevel = (level: string[]) => {
 
 export const LeveLconstructor = () => {
   const router = useRouter();
-  const { gameLevel, setLevel, handleAddLine } = useContext(GameContext);
+  const { gameLevel, setLevel, handleAddLine } = useMyContext();
   const [tool, setTool] = useState<Tool>(" ");
   const [isMouseDown, setIsMouseDown] = useState(false);
 

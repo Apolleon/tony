@@ -1,7 +1,7 @@
 "use client";
 import { useContext, useEffect, useRef, useState } from "react";
-import { GameContext } from "../layout";
 import { useRouter } from "next/navigation";
+import { useMyContext } from "../_components/useGameContext";
 
 const simpleLevelPlan = [
   "                                     ",
@@ -276,10 +276,10 @@ const Game = () => {
   const keys = useRef({});
   const animationRef = useRef(null);
   const lastTime = useRef(null);
-  const { gameLevel } = useContext(GameContext);
+  const { gameLevel } = useMyContext();
 
   useEffect(() => {
-    if (!validateLevel(level)) return router.push("/");
+    if (validateLevel(gameLevel)) return router.push("/");
     // Initial level setup
     const newLevel = new Level(gameLevel);
     setLevel(newLevel);
