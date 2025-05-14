@@ -1,5 +1,3 @@
-//@ts-nocheck
-import { Actor } from "../types";
 import { Player } from "./Player";
 import { Coin } from "./Coin";
 import { Lava } from "./Lava";
@@ -14,21 +12,21 @@ const actorChars = {
 };
 
 export class Level {
-  width: number;
-  height: number;
-  grid: (Actor | string)[] = [];
-  actors: Actor[] = [];
+  width;
+  height;
+  grid;
+  actors;
 
-  constructor(plan: string[]) {
+  constructor(plan) {
     this.width = plan[0].length;
     this.height = plan.length;
 
     for (let y = 0; y < this.height; y++) {
       const line = plan[y],
-        gridLine: (Actor | string)[] = [];
+        gridLine = [];
       for (let x = 0; x < this.width; x++) {
-        const ch = line[x] as keyof typeof actorChars;
-        let fieldType: "wall" | "lava";
+        const ch = line[x];
+        let fieldType;
         const Actor = actorChars[ch];
         if (Actor) this.actors.push(new Actor(new Vector(x, y), ch));
         else if (ch == "x") fieldType = "wall";
@@ -81,7 +79,7 @@ export class Level {
       step -= thisStep;
     }
   }
-  playerTouched(type, actor?) {
+  playerTouched(type, actor) {
     if (type == "lava" && this.status == null) {
       this.status = "lost";
       this.finishDelay = 1;

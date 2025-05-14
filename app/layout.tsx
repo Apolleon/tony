@@ -8,10 +8,16 @@ type GameContext = {
   handleAddLine: () => void;
 };
 
-export const GameContext = createContext<GameContext>({} as GameContext);
-
 const EMPTY_LINE = new Array(20).fill(" ").join("");
 const initialLinesArray = new Array(5).fill(EMPTY_LINE);
+
+const initialContext: GameContext = {
+  gameLevel: initialLinesArray,
+  setLevel: () => {},
+  handleAddLine: () => {},
+};
+
+export const GameContext = createContext<GameContext>(initialContext);
 
 export default function RootLayout({
   children,
