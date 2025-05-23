@@ -1,6 +1,6 @@
 import { Dispatch, FC, useState, useEffect, useRef, ReactNode } from "react";
 import { Tool } from "./types";
-import { GameActor, Lava, Level, Vector, Coin } from "../game/page";
+import { GameActor, Lava, Level, Vector, Coin } from "../_components/classes";
 
 interface ToolbarProps {
   setTool: Dispatch<Tool>;
@@ -46,7 +46,7 @@ export const Toolbar: FC<ToolbarProps> = ({ setTool, chosenTool }) => {
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef?.current);
     };
-  }, []);
+  }, [actors]);
 
   return (
     <div className="flex flex-col fixed left-10 -top-30 bg-black w-40 text-center items-center scale-50">
