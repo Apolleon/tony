@@ -3,10 +3,11 @@
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
 html {
-  background-color: aliceblue;
+  background-color: rgb(37, 37, 37);
   height: 100%;
 }
 
@@ -15,12 +16,15 @@ html {
   table-layout: fixed;
   border-spacing: 0;
 }
+
 .background td {
   padding: 0;
 }
+
 .lava {
   background: rgb(255, 100, 100);
 }
+
 .wall {
   background: white;
 }
@@ -28,6 +32,7 @@ html {
 .actor {
   position: absolute;
 }
+
 .coin {
   background: rgb(241, 229, 89);
   border-radius: 50%;
@@ -42,8 +47,10 @@ html {
   content: "$";
   font-size: 10px;
 }
+
 .player {
-  background: rgb(64, 64, 64);
+  background: brown;
+  background-image: url("/tony.png");
 }
 
 .lost .player {
@@ -58,8 +65,34 @@ html {
   overflow: hidden;
   max-width: 1200px;
   max-height: 800px;
+  position: relative;
 }
 
 .space {
   background-color: transparent;
+}
+
+.btn {
+  border-radius: 3px;
+  background-color: black;
+  color: rgb(71, 71, 71);
+  border: 1px solid black;
+  padding: 4px;
+  font-weight: 900;
+  font-size: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  line-height: 1;
+  text-align: center;
+}
+
+.btn:disabled {
+  color: rgb(46, 46, 46);
+  background-color: rgb(27, 27, 27);
+}
+
+.btn span {
+  transform: translateY(-2px);
 }

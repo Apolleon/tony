@@ -25,7 +25,7 @@ const gravity = 30;
 const jumpSpeed = 17;
 const arrowCodes = { 37: "left", 38: "up", 39: "right" };
 
-class Vector {
+export class Vector {
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -38,7 +38,7 @@ class Vector {
   }
 }
 
-class Player {
+export class Player {
   constructor(pos) {
     this.pos = pos.plus(new Vector(0, -0.5));
     this.size = new Vector(0.8, 1.5);
@@ -84,7 +84,7 @@ class Player {
 
 Player.prototype.type = "player";
 
-class Lava {
+export class Lava {
   constructor(pos, ch) {
     this.pos = pos;
     this.size = new Vector(1, 1);
@@ -107,7 +107,7 @@ class Lava {
 
 Lava.prototype.type = "lava";
 
-class Coin {
+export class Coin {
   constructor(pos) {
     this.basePos = this.pos = pos.plus(new Vector(0.2, 0.1));
     this.size = new Vector(0.6, 0.6);
@@ -130,7 +130,7 @@ const actorChars = {
   "!": Lava,
 };
 
-class Level {
+export class Level {
   constructor(plan) {
     this.width = plan[0].length;
     this.height = plan.length;
@@ -211,7 +211,7 @@ class Level {
   }
 }
 
-const GameActor = ({ actor }) => {
+export const GameActor = ({ actor }) => {
   const style = {
     width: actor.size.x * scale + "px",
     height: actor.size.y * scale + "px",
@@ -219,6 +219,7 @@ const GameActor = ({ actor }) => {
     top: actor.pos.y * scale + "px",
   };
 
+  if (actor.type === "player") return <img className="actor" src="/tony.png" style={style} />;
   return <div className={`actor ${actor.type}`} style={style}></div>;
 };
 
@@ -370,14 +371,16 @@ const Game = () => {
   if (!level) return <div>Loading...</div>;
 
   return (
-    <div className={`game ${status || ""}`} ref={gameRef}>
-      <Background level={level} />
-      <div className="actors">
-        {actors.map((actor, i) => (
-          <GameActor key={i} actor={actor} />
-        ))}
+    <section className="w-screen h-screen flex justify-center items-center">
+      <div className={`game ${status || ""}`} ref={gameRef}>
+        <Background level={level} />
+        <div className="actors">
+          {actors.map((actor, i) => (
+            <GameActor key={i} actor={actor} />
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

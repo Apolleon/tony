@@ -5,6 +5,7 @@ type GameContextType = {
   gameLevel: string[];
   setLevel: Dispatch<SetStateAction<string[]>>;
   handleAddLine: () => void;
+  clearLevel: () => void;
 };
 
 const EMPTY_LINE = new Array(20).fill(" ").join("");
@@ -14,6 +15,7 @@ const initialContext: GameContextType = {
   gameLevel: initialLinesArray,
   setLevel: () => {},
   handleAddLine: () => {},
+  clearLevel: () => {},
 };
 
 const MyContext = createContext(initialContext);
@@ -22,10 +24,20 @@ export function MyContextProvider({ children }: { children: ReactNode }) {
   const [gameLevel, setLevel] = useState<string[]>(initialLinesArray);
 
   const handleAddLine = () => {
-    setLevel((prev) => [...prev, EMPTY_LINE]);
+    const currentLinesLength = gameLevel[0].length;
+    const newLine = new Array(currentLinesLength).fill(" ").join("");
+    setLevel((prev) => [...prev, newLine]);
   };
 
-  return <MyContext.Provider value={{ gameLevel, handleAddLine, setLevel }}>{children}</MyContext.Provider>;
+  const handleClear = () => {
+    setLevel(initialLinesArray);
+  };
+
+  return (
+    <MyContext.Provider value={{ gameLevel, handleAddLine, setLevel, clearLevel: handleClear }}>
+      {children}
+    </MyContext.Provider>
+  );
 }
 
 export const useMyContext = () => useContext(MyContext);
