@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useMyContext } from "../_components/useGameContext";
 import { GameActor, Level } from "../_components/classes";
+import Link from "next/link";
 
 const simpleLevelPlan = [
   "                                     ",
@@ -119,11 +120,6 @@ const Game = () => {
 
         if (level.isFinished()) {
           if (level.status === "lost") {
-            // Reset level
-            const newLevel = new Level(gameLevel);
-            setLevel(newLevel);
-            setActors([...newLevel.actors]);
-            setStatus(null);
           } else {
             console.log("You win!");
             return;
@@ -149,13 +145,19 @@ const Game = () => {
       const top = gameRef.current.scrollTop;
       const bottom = top + height;
 
-      const center = level.player?.pos.plus(level.player.size.times(0.5)).times(scale);
+      const center = level.player?.pos
+        .plus(level.player.size.times(0.5))
+        .times(scale);
 
-      if (center.x < left + margin) gameRef.current.scrollLeft = center.x - margin;
-      else if (center.x > right - margin) gameRef.current.scrollLeft = center.x + margin - width;
+      if (center.x < left + margin)
+        gameRef.current.scrollLeft = center.x - margin;
+      else if (center.x > right - margin)
+        gameRef.current.scrollLeft = center.x + margin - width;
 
-      if (center.y < top + margin) gameRef.current.scrollTop = center.y - margin;
-      else if (center.y > bottom - margin) gameRef.current.scrollTop = center.y + margin - height;
+      if (center.y < top + margin)
+        gameRef.current.scrollTop = center.y - margin;
+      else if (center.y > bottom - margin)
+        gameRef.current.scrollTop = center.y + margin - height;
     };
 
     animationRef.current = requestAnimationFrame(animate);
@@ -167,15 +169,35 @@ const Game = () => {
 
   if (!level) return <div>Loading...</div>;
 
+  const restartLevel = () => {
+    const newLevel = new Level(gameLevel);
+    setLevel(newLevel);
+    setActors([...newLevel.actors]);
+    setStatus(null);
+  };
+
   return (
     <section className="w-screen h-screen flex justify-center items-center">
       <div className={`game ${status || ""}`} ref={gameRef}>
+        {status && (
+          <div className="absolute size-full backdrop-brightness-50 flex items-center justify-center">
+            <div className="flex flex-col gap-3 items-center p-5 py-3 bg-amber-600">
+              <h2>{status === "won" ? "Ты выиграл!" : "Ты проиграл!"}</h2>
+              <div className="flex gap-2">
+                <Link href={"/"}>На главную</Link>
+                <button onClick={restartLevel}>Заново</button>
+              </div>
+            </div>
+          </div>
+        )}
         <Background level={level} />
-        <div className="actors">
-          {actors.map((actor, i) => (
-            <GameActor key={i} actor={actor} />
-          ))}
-        </div>
+        {!status && (
+          <div className="actors">
+            {actors.map((actor, i) => (
+              <GameActor key={i} actor={actor} />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -28,24 +28,37 @@ export const LeveLconstructor = () => {
   const handleMouseDown = useCallback(
     (lineIndex: number, charIndex: number) => {
       setIsMouseDown(true);
-      setLevel((prev) =>
-        prev.map((line, i) => {
-          if (i === lineIndex) {
-            return line.substring(0, charIndex) + tool + line.substring(charIndex + 1);
-          }
-          return line;
-        })
-      );
+
+      let newLevel = gameLevel;
+      if (tool === "@") {
+        if (lineIndex === 0) return;
+        if (newLevel[lineIndex - 1][charIndex] !== " ") return;
+        newLevel = newLevel.map((line) => line.replace("@", " "));
+      }
+
+      newLevel = newLevel.map((line, i) => {
+        if (i === lineIndex) {
+          return (
+            line.substring(0, charIndex) + tool + line.substring(charIndex + 1)
+          );
+        }
+        return line;
+      });
+
+      setLevel(newLevel);
     },
-    [tool, setLevel]
+    [tool, setLevel, gameLevel]
   );
 
   const handleMouseEnter = (blockId: number, lineIndex: number) => {
-    if (!isMouseDown) return;
+    if (!isMouseDown || tool === "@") return;
+
     setLevel((prev) =>
       prev.map((line, i) => {
         if (i === lineIndex) {
-          return line.substring(0, blockId) + tool + line.substring(blockId + 1);
+          return (
+            line.substring(0, blockId) + tool + line.substring(blockId + 1)
+          );
         }
         return line;
       })
@@ -103,7 +116,11 @@ export const LeveLconstructor = () => {
           <button className="btn !text-xl" onClick={handleAddLine}>
             Add line
           </button>
-          <button className="btn" onClick={() => router.push("/game")} disabled={!validateLevel(gameLevel)}>
+          <button
+            className="btn"
+            onClick={() => router.push("/game")}
+            disabled={!validateLevel(gameLevel)}
+          >
             Play
           </button>
           <button className="btn !text-xl" onClick={clearLevel}>
